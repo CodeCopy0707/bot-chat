@@ -1,10 +1,10 @@
-from aiogram import Bot, Dispatcher, types, executor
+from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import google.generativeai as genai
 
 # Telegram and Gemini API keys
 TELEGRAM_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
-GEMINI_API_KEY = "YOUR_GOOGLE_GEMINI_API_KEY"
+GEMINI_API_KEY = "YOUR_GOOGLE_GENIUS_API_KEY"
 
 # Initialize the Telegram Bot and Dispatcher
 bot = Bot(token=TELEGRAM_TOKEN)
@@ -14,7 +14,7 @@ dp = Dispatcher(bot)
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
 
-# Function to generate a response in Hinglish
+# Function to generate a more explicit adult response in Hinglish
 def generate_adult_response(user_input):
     try:
         response = model.generate_content(f"Respond like a real erotic girlfriend, always first you msg, but too much loving, little talk, supportive, and loving and say everything in Hinglish. The user said: {user_input}")
@@ -34,6 +34,10 @@ async def handle_message(message: types.Message):
     response = generate_adult_response(user_input)
     await message.reply(response)
 
-# Run the bot
+# Create the WSGI app for Gunicorn
+from aiogram import executor
+def app():
+    return dp
+
 if __name__ == "__main__":
     executor.start_polling(dp, skip_updates=True)
